@@ -17,13 +17,13 @@ defmodule NucleotideCount do
     _count(strand, nucleotide)
   end
 
-  def _count([head|tail], nucleotide, counter \\ 0) do
+  def _count(strand, nucleotide, counter \\ 0)
+  def _count([head|tail], nucleotide, counter) do
     cond do
       head == nucleotide -> _count(tail, nucleotide, counter + 1)
       true -> _count(tail, nucleotide, counter)
     end
   end
-
   def _count([], nucleotide, counter) do
     counter
   end
@@ -38,6 +38,15 @@ defmodule NucleotideCount do
   """
   @spec histogram([char]) :: map
   def histogram(strand) do
-    nil
+    _histogram(strand)
+  end
+
+  def _histogram(strand, hist \\ %{?A=> 0, ?C=> 0, ?G=> 0, ?T=> 0})
+  def _histogram([head|tail], hist) do
+    next = Map.put(hist, head, hist[head] + 1)
+    _histogram(tail, next)
+  end
+  def _histogram([], hist) do
+    hist
   end
 end
